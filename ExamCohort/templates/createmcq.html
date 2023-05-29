@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-group" style="width: 50%;">
+    <form action="" method="POST">
+      
+        {%csrf_token%}
+        {{form.as_p}}
+        {% if messages %}
+
+        {% for message in messages %}
+        {% if message.tags %} {% endif %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}{% endif %}
+        <i class="fa-solid fa-circle-exclamation"></i>&nbsp;&nbsp;{{ message }}
+        <br>
+        {% endfor %}
+
+        {% endif %}
+
+        <button type="submit" class="btn btn-dark" style="border-radius: 10px; margin-top: 10px;" value="Save">Submit</button>
+    </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+    
+
+    <link href="{% static 'node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+    <link href="{% static 'node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
+    <link href="{% static 'node_modules/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
+    <link href="{% static 'css/examples.css' %}" rel="stylesheet">
+    <script src="{% static 'node_modules/video.js/dist/video.min.js' %}"></script>
+    <script src="{% static 'node_modules/recordrtc/RecordRTC.js' %}"></script>
+    <script src="{% static 'node_modules/webrtc-adapter/out/adapter.js' %}"></script>
+    <script src="{% static 'node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
+    <script src="{% static 'node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
+    <script src="{% static 'node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
+    <script src="{% static 'node_modules/videojs-record/dist/videojs.record.js' %}"></script>
+    <script src="{% static 'js/browser-workarounds.js' %}"></script>
+
+
+    <style>
+        /* change player background color */
+        #myAudio {
+            width: 50%;
+            border-radius: 5px;
+        }
+        #myAudio2{
+            background-color: #000000;
+            width: 50%;
+            border-radius: 5px;
+        }
+        #submit{
+            width:50%;
+        }
+    </style>
+
+
+
+
+    {% csrf_token %}
+    
+    
+
+            <h5 style="font-weight: bold;font-style: oblique;">Record Question:</h5>
+            <audio id="myAudio" class="video-js vjs-default-skin"></audio>
+
+            <!--button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button--><br>
+    
+
+   
+
+    
+
+
+            <h5 style="font-weight: bold;font-style: oblique;">Record Answer:</h5>
+            <audio id="myAudio2" class="video-js vjs-default-skin"></audio>
+
+            <!--button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button--><br>
+            <button class="btn btn-dark" id="submit" disabled>Save</button>
+
+
+  
+
+
+
+    <input type="hidden" id="myVar" name="variable" value="{{ file_name }}">
+    <input type="hidden" id="myVar2" name="variable" value="{{ answer_file_name }}">
+    <script src="{% static 'js/theplayer.js' %}"></script>
+
+
+{% endblock %}

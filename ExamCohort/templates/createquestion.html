@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .list-group-item {
+background-color: #f1f1f1;
+border-top: 1px solid #ddd;
+border-radius: 0;
+}
+body {
+  counter-reset: section;
+}
+
+h5::before {
+  counter-increment: section;
+  content: "Question " counter(section) ": ";
+}
+audio::-webkit-media-controls-play-button,
+     audio::-webkit-media-controls-panel {
+     background-color: #D0D5D9;
+     color: #000;
+     }
+</style>
+<div class="d-flex flex-row-reverse">
+  <div class="p-2"><a href="{% url 'ExamCohort:createmcq' Assessment_ID %}">
+    <button type="button" class="btn btn-dark" style="border-radius: 5px;">Create MCQ Question&nbsp;<i
+            class="fa-solid fa-book-open"></i></button>
+</a>
+</div>
+<div class="p-2"><a href="{% url 'ExamCohort:createmicroviva' Assessment_ID %}">
+  <button type="button" class="btn btn-dark" style="border-radius: 5px;">Create Micro Viva Question&nbsp;<i
+          class="fa-solid fa-book-open"></i></button>
+</a>
+</div>
+</div>
+<br>
+{%if query_set %}
+{% for obj in query_set %}
+{%if obj.mcq %}
+<div class="container-fluid">
+<div class="card border-secondary" style="width: 30rem;">
+    <div class="card-header text-white" style="background-color: #393D47;margin-top: -1px;">
+      <h5 >{{obj.mcq.Question_Text}} </h5><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;{{obj.mcq.Time_limit_in_seconds}} Seconds&nbsp;&nbsp;<i class="fa-solid fa-circle-check"></i>&nbsp;&nbsp;<span style=" font-weight: bold;">Marks:</span>&nbsp;{{obj.mcq.Mark}}
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><i class="fa-solid fa-circle-dot"></i>&nbsp;&nbsp;{{obj.mcq.Choice_1}}</li>
+      <li class="list-group-item"><i class="fa-solid fa-circle-dot"></i>&nbsp;&nbsp;{{obj.mcq.Choice_2}}</li>
+      <li class="list-group-item"><i class="fa-solid fa-circle-dot"></i>&nbsp;&nbsp;{{obj.mcq.Choice_3}}</li>
+      <li class="list-group-item"><i class="fa-solid fa-circle-dot"></i>&nbsp;&nbsp;{{obj.mcq.Choice_4}}</li>
+      <li class="list-group-item"><i class="fa-solid fa-circle-check"></i>&nbsp;&nbsp;<span style=" font-weight: bold;">Answer:</span>&nbsp;{{obj.mcq.Answer}}</li>
+    </ul>
+  </div>
+  <br>
+</div>
+{%else%}
+<div class="container-fluid">
+<div class="card card border-secondary" style="width: 30rem;">
+  <div class="card-header text-white" style="background-color: #393D47;">
+    <h5></h5>
+    </div>
+    <div class="card-body" style="background: #f1f1f1;">
+    <span style="font-size: 20px; font-weight: bold;">Micro Viva Question:</span><br><br>
+    <audio src="{{obj.microviva.voice_record.url}}" controls></audio>
+    <br><br>
+    <span style="font-size: 20px; font-weight: bold;">Micro Viva Answer:</span><br><br>
+    <audio src="{{obj.microviva.answer_record.url}}" controls></audio>
+    </div>
+    </div>
+  </div>
+  <br>
+  
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+

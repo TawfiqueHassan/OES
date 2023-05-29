@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+.done {color: tomato !important; font-weight: bold;}
+.blink {
+  animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+
+  .list-group-item {
+background-color: #f1f1f1;
+border-top: 1px solid #ddd;
+border-radius: 0;
+}
+body {
+  counter-reset: section;
+}
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-weight: bold;
+  
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.checkmark {
+  position: absolute;
+  border: 2px solid rgba(0,0,0, 0.25);
+  top: 5px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+.container .checkmark:after {
+ 	top:  4px;
+	left: 3.7px;
+	width: 7.2px;
+	height: 7px;
+	border-radius: 50%;
+	background: white;
+}
+audio::-webkit-media-controls-play-button,
+     audio::-webkit-media-controls-panel {
+     background-color: #D0D5D9;
+     color: #000;
+     }
+.timer{
+  text-align: right;
+}
+
+</style>
+{%if object_list.mcq %}
+<div class="container-fluid">
+<div class="card border-secondary" style="width: 30rem;">
+    <div class="card-header text-white" style="background-color: #393D47;">
+      <div class="timer"><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;<span id="timer"></span></div><h5 style="font-style: italic;">Q:&nbsp;{{object_list.mcq.Question_Text}}</h5>
+    </div>
+    <form method="POST" action="{% url 'Assessments:attempt' Assessment_ID %}">
+      {%csrf_token%}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><label class="container">&nbsp;&nbsp;{{object_list.mcq.Choice_1}}
+        <input  value="{{object_list.mcq.Choice_1}}" type="radio" name="answer" id="option_1" >
+        <span class="checkmark"></span>
+      </label>
+      <li class="list-group-item"><label class="container">&nbsp;&nbsp;{{object_list.mcq.Choice_2}}
+        <input  value="{{object_list.mcq.Choice_2}}" type="radio" name="answer" id="option_2" >
+        <span class="checkmark"></span>
+      </label>
+      <li class="list-group-item"><label class="container">&nbsp;&nbsp;{{object_list.mcq.Choice_3}}
+        <input  value="{{object_list.mcq.Choice_3}}" type="radio" name="answer" id="option_3" >
+        <span class="checkmark"></span>
+      </label>
+      <li class="list-group-item"><label class="container">&nbsp;&nbsp;{{object_list.mcq.Choice_4}}
+        <input  value="{{object_list.mcq.Choice_4}}" type="radio" name="answer" id="option_4" >
+        <span class="checkmark"></span>
+      </label>
+    </ul>
+    </div>
+  </div>
+  <br>
+  <input type="hidden" name="id" value="{{ object_list.id }}">
+  <input type="submit" name="skip" value="Skip" class="btn btn-warning skipBtn" style="border-radius: 5px;margin-left: 12px;">
+  <input type="submit" name="submit" value="Submit" class="btn btn-primary submitBtn" style="border-radius: 5px;">
+</div>
+</form>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'jQuery.countdownTimer-2.0.0/js/jQuery.countdownTimer.js' %}"></script>
+<!-- Good alternative is to include minified file jQuery.countdownTimer.min.js -->
+<link rel="stylesheet" type="text/css" href="{% static 'jQuery.countdownTimer-2.0.0/css/jQuery.countdownTimer.css' %}" />
+<!-- For regional language support, include below file -->
+<!--<script type="text/javascript" src="js/localisation/jQuery.countdownTimer-[region-code].js"></script>-->
+
+<script type="text/javascript">
+  var jQuery_3_2_1 = $.noConflict(true);
+  var time = "{{object_list.mcq.Time_limit_in_seconds}}" ; // This is the time allowed
+
+      $(document).ready(function(){
+          $(".submitBtn").on('click',function(){
+            var _checkedAns=$("input[name='answer']:checked").val();
+            if(_checkedAns==undefined){
+              alert('Please select an option');
+              return false;
+            }
+          });
+      });
+
+      const pageAccessedByReload = (
+  (window.performance.navigation && window.performance.navigation.type === 1) ||
+    window.performance
+      .getEntriesByType('navigation')
+      .map((nav) => nav.type)
+      .includes('reload')
+);
+
+if(pageAccessedByReload){
+  $(".skipBtn").trigger('click');
+}
+
+      
+      jQuery_3_2_1(function(){
+        jQuery_3_2_1("#timer").countdowntimer({
+          seconds :time,
+          size : "sm",
+          borderColor : "#343a40",
+          backgroundColor : "#343a40",
+          fontColor : "#fff",
+          timeUp :function(){
+            jQuery_3_2_1(".skipBtn").trigger('click');
+          }
+      });
+  });
+
+</script>
+
+
+
+{%else%}
+
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'jQuery.countdownTimer-2.0.0/js/jQuery.countdownTimer.js' %}"></script>
+<!-- Good alternative is to include minified file jQuery.countdownTimer.min.js -->
+<link rel="stylesheet" type="text/css" href="{% static 'jQuery.countdownTimer-2.0.0/css/jQuery.countdownTimer.css' %}" />
+<!-- For regional language support, include below file -->
+<!--<script type="text/javascript" src="js/localisation/jQuery.countdownTimer-[region-code].js"></script>-->
+
+<script type="text/javascript">
+
+var jQuery_3_2_1 = $.noConflict(true);
+jQuery_3_2_1(function(){
+        jQuery_3_2_1("#timer").countdowntimer({
+          seconds :30,
+          size : "sm",
+          borderColor : "#343a40",
+          backgroundColor : "#343a40",
+          fontColor : "#fff",
+          timeUp :function(){
+            jQuery_3_2_1("#submit").trigger('click');
+          }
+      });
+  });
+
+</script>
+
+
+
+
+
+
+
+
+
+<link href="{% static 'node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+<link href="{% static 'node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
+<link href="{% static 'node_modules/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
+<link href="{% static 'css/examples.css' %}" rel="stylesheet">
+<script src="{% static 'node_modules/video.js/dist/video.min.js' %}"></script>
+<script src="{% static 'node_modules/recordrtc/RecordRTC.js' %}"></script>
+<script src="{% static 'node_modules/webrtc-adapter/out/adapter.js' %}"></script>
+<script src="{% static 'node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
+<script src="{% static 'node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
+<script src="{% static 'node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
+<script src="{% static 'node_modules/videojs-record/dist/videojs.record.js' %}"></script>
+<script src="{% static 'js/browser-workarounds.js' %}"></script>
+
+
+<style>
+    /* change player background color */
+    #myAudio {
+        width: 50%;
+        border-radius: 5px;
+    }
+    #submit{
+        width:50%;
+    }
+</style>
+
+<div class="container-fluid">
+  <div class="card card border-secondary" style="width: 30rem;">
+    <div class="card-header text-white" style="background-color: #393D47;">
+      <h5><span class="position-absolute bottom-0 start-0">Micro Viva Question:</span><div class="timer"><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;<span id="timer"></div></span></h5>
+      </div>
+      <div class="card-body" style="background: #f1f1f1;">
+      <audio src="{{object_list.microviva.voice_record.url}}" controls></audio>
+      <br><br>
+      </div>
+      </div>
+    </div>
+    <br>
+
+
+{% csrf_token %}
+
+
+
+
+
+
+
+
+
+<div class="container-fluid">
+        <h5 style="font-weight: bold;font-style: oblique;">Record Answer: </h5>
+        <audio id="myAudio" class="video-js vjs-default-skin"></audio>
+  
+   
+        <!--button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button-->
+   
+ 
+      <!--button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button--><br>
+      <button class="btn btn-dark" id="submit" >Save</button>
+    </div>
+
+<input type="hidden" id="id" value="{{ object_list.id }}">
+<input type="hidden" id="As_ID" name="variable" value="{{ Assessment_ID }}"> 
+<input type="hidden" id="myVar" name="variable" value="{{ file_name }}">
+<script src="{% static 'js/theplayer1.js' %}"></script>
+
+
+
+
+{% endif %}
+{% endblock %}

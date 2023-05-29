@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% for obj in object_list %}
+<div class="card border-secondary text-center  " style="width: 15rem; background-color: #f1f1f1; border-radius: 5px;float:left; margin-left: 25px;margin-bottom: 20px;">
+    <div class="card-body">
+        <h5 class="card-header text-white" style="font-weight: bold; border-radius: 0px; background-color: #393D47; margin-left: -21px; margin-right: -21px; margin-top: -21px;">{{obj.name}}</h5><br>
+        <strong>Start: </strong>{{ obj.startDate|date:"M d, g:iA" }}<br>
+        <strong>Due: &nbsp</strong>{{ obj.dueDate|date:"M d, g:iA" }}
+        <a href="{% url 'Assessments:attempt' obj.id %}" class="card-link">
+            <br><br>
+            <button type="button" class="btn btn-dark pull-center" style="border-radius: 10px;">Enter <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+        </a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

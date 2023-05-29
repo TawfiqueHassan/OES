@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid" style="padding-top: 20px;">
+<div class="card border-secondary text-center  " style="width: 15rem; background-color: #f1f1f1; border-radius: 5px;float:left; margin-left: 25px;margin-bottom: 20px;">
+    <div class="card-body">
+        <h5 class="card-header text-white" style="font-weight: bold; border-radius: 0px; background-color: #393D47; margin-left: -21px; margin-right: -21px; margin-top: -21px;">{{name}}</h5><br>
+        <a href="{% url 'ExamCohort:index' %}" class="card-link">
+            <button type="button" class="btn btn-dark pull-center" style="border-radius: 10px;">Enter <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+        </a>
+    </div>
+</div>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
